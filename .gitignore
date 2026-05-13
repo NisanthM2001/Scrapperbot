@@ -1,0 +1,36 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Database
+*.db
+temp_data.db
+
+# Downloads
+downloads/
+
+# Logs
+*.log
+
+# OS files
+Thumbs.db
+Desktop.ini
+
+# Environment variables
+.env
+
+# Antigravity internal
+.gemini/
+.gemini
+artifacts/
+scratch/
+implementation_plan.md
+task.md
+walkthrough.md
