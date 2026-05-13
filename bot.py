@@ -15,6 +15,7 @@ import config
 import ui
 import uploader
 import database
+from aiohttp import web
 
 # Define search patterns
 MAGNET_PATTERN = re.compile(r"magnet:\?xt=urn:[a-z0-9]+:[a-zA-Z0-9]+", re.IGNORECASE)
@@ -376,7 +377,21 @@ async def handle_send_all(cq: CallbackQuery):
             if count >= 50: break
     if count > 0: await cq.message.answer(ui.get_delivery_complete_msg(category), parse_mode="HTML")
 
+async def health_check(request):
+    return web.Response(text="Bot is running!")
+
 async def main():
+    # Start a dummy web server for Render health checks
+    app = web.Application()
+    app.router.add_get("/", health_check)
+    runner = web.AppRunner(app)
+    await runner.setup()
+    
+    port = int(os.environ.get("PORT", 4000))
+    site = web.TCPSite(runner, "0.0.0.0", port)
+    await site.start()
+    print(f"Health check server started on port {port}")
+
     bot = Bot(token=config.BOT_TOKEN)
     try: await bot.send_message(config.ADMIN_ID, "✅ <b>Bot Online!</b>", parse_mode="HTML")
     except: pass
